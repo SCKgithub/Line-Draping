@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>topo Cesium POC</title>
+  <script src="../Build/Cesium/Cesium.js"></script>
+  <style>
+      @import url(../Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+
+
+<script>
+	var viewer = new Cesium.Viewer('cesiumContainer');
+	//var widget = new Cesium.CesiumWidget('cesiumContainer');
+
+
+	var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
+		url : '../Apps/terrain_43k10'
+	 });
+	viewer.terrainProvider = cesiumTerrainProviderMeshes; 
+
+
+
+	var url='http://localhost:1025/geoserver/wms'
+	//Geoserver URL
+	//var layers = widget.scene.globe.imageryLayers;
+	var layers = viewer.scene.globe.imageryLayers;
+ 	   //layers.removeAll();
+ 	   layers.addImageryProvider(new Cesium.WebMapServiceImageryProvider({
+   	    url : url,        
+    	    layers: 'geotiff_coverage'// Here just give layer name
+  	  }));
+
+
+	var dataSource = Cesium.KmlDataSource.load('../KML/CINTBR_7102.kml');
+	viewer.dataSources.add(dataSource);
+	
+	Cesium.KmlDataSource.clampToGround = true;
+	viewer.zoomTo(dataSource);
+
+
+
+
+
+  </script>
+</body>
+</html>
+
